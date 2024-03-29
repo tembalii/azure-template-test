@@ -42,7 +42,7 @@ steps:
     script: |
       EXCLUDE_PATTERNS="${{ parameters.excludePatterns }}"
       INCLUDE_PATTERNS="${{ parameters.includePatterns }}"
-      if [ -z "$(System.PullRequest.PullRequestId)" ]; then
+      if [ -z "${{ env.SYSTEM_PULLREQUEST_PULLREQUESTID }}" ]; then
           export SEMGREP_REPO_NAME=${{ parameters.SEMGREP_REPO_NAME }}
           echo "Semgrep full scan"
           SEMGREP_COMMAND="semgrep ci"
@@ -59,16 +59,14 @@ steps:
           SEMGREP_COMMAND="$SEMGREP_COMMAND --json --output report.json  || true"
           echo "$SEMGREP_COMMAND"
           /bin/bash -c "$SEMGREP_COMMAND"
-      elif [ -n "$(System.PullRequest.PullRequestId)" ]; then
+      else
           echo "Semgrep diff scan"
           echo "Pull Request Scan from branch=$(Build.SourceBranchName)"
-          echo "Pull Request Id: $(System.PullRequest.PullRequestId)"
-          echo "Pull Request number: $(System.PullRequest.PullRequestNumber)"
-          #export SEMGREP_REPO_NAME=${{ parameters.SEMGREP_REPO_NAME }}
-          export SEMGREP_APP_TOKEN=${{ parameters.SEMGREP_APP_TOKEN }}
-          export SEMGREP_PR_ID=$(System.PullRequest.PullRequestNumber)
-          export SEMGREP_BASELINE_REF='origin/$(System.PullRequest.TargetBranch)'
-          git fetch origin $(System.PullRequest.TargetBranch):refs/remotes/origin/$(System.PullRequest.TargetBranch)
+          echo "Pull Request Id: $SYSTEM_PULLREQUEST_PULLREQUESTID"
+          echo "Pull Request number: $SYSTEM_PULLREQUEST_PULLREQUESTNUMBER"
+          export SEMGREP_PR_ID=$SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
+          export SEMGREP_BASELINE_REF="origin/$SYSTEM_PULLREQUEST_TARGETBRANCH"
+          git fetch origin $SYSTEM_PULLREQUEST_TARGETBRANCH:refs/remotes/origin/$SYSTEM_PULLREQUEST_TARGETBRANCH
           SEMGREP_COMMAND="semgrep ci"
           if [ -n "$INCLUDE_PATTERNS" ]; then
             IFS=',' read -r -a INCLUDE_ARRAY <<< "$INCLUDE_PATTERNS"
@@ -84,6 +82,7 @@ steps:
           echo "$SEMGREP_COMMAND"
           /bin/bash -c "$SEMGREP_COMMAND"
       fi
+
 
 - task: Bash@3
   displayName: 'Process Findings & Set Guardrails'
