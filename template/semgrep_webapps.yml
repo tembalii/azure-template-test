@@ -14,11 +14,13 @@ parameters:
 - name: failOn
   type: string
   default: ''
+
 steps:
 - checkout: self
   clean: true
   fetchDepth: 50
   persistCredentials: true
+
 - script: |
     python -m pip install --upgrade pip
     pip install semgrep
@@ -27,10 +29,12 @@ steps:
     SEMGREP_APP_TOKEN: ${{ parameters.SEMGREP_APP_TOKEN }}
     SEMGREP_REPO_NAME: ${{ parameters.SEMGREP_REPO_NAME }}
     SEMGREP_REPO_URL: $(Build.Repository.Uri)
+
 - ${{ if ne(parameters.SEMGREP_REPO_NAME, '') }}:
-- script: |
+  - script: |
       export SEMGREP_REPO_NAME=${{ parameters.SEMGREP_REPO_NAME }}
-  displayName: 'Set SEMGREP_REPO_NAME Environment Variable'
+    displayName: 'Set SEMGREP_REPO_NAME Environment Variable'
+
 - task: Bash@3
   displayName: 'Semgrep SAST Scan'
   inputs:
@@ -79,6 +83,7 @@ steps:
           echo "$SEMGREP_COMMAND"
           /bin/bash -c "$SEMGREP_COMMAND"
       fi
+
 - task: Bash@3
   displayName: 'Process Findings & Set Guardrails'
   inputs:
@@ -89,6 +94,7 @@ steps:
         echo "Security guardrails is not set, skipping task."
         exit 0
       fi
+
       
       json_file=report.json
       echo "Iterating through findings"
