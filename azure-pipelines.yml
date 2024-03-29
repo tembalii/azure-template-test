@@ -4,24 +4,17 @@
 # https://aka.ms/yaml
 
 variables:
-- group: Semgrep_Variables
-
-steps:
-- checkout: self
-  clean: true
-  fetchDepth: 20
-  persistCredentials: true
-- script: |
-    python -m pip install --upgrade pip
-    pip install semgrep
-    if [ $(Build.SourceBranchName) = "main" ]; then
-        echo "Semgrep full scan"
-        semgrep ci
-    elif [ $(System.PullRequest.PullRequestId) -ge 0 ]; then
-        echo "Semgrep diff scan"
-        export SEMGREP_PR_ID=$(System.PullRequest.PullRequestId)
-        export SEMGREP_BASELINE_REF='origin/main'
-        git fetch origin master:origin/main
-        semgrep ci 
-    fi
-  displayName: 'Run a multi-line script'
+- group: Semgrep_Variables # Ensure your pipeline is permitted to use this resource. More details can be found in additonal information below.
+# resources:
+#   repositories:
+#     - repository: templates
+#       type: github
+#       name: DigitalInnovation/semgrep-appsec-workflow
+#       ref: refs/tags/v2.0.0
+#       endpoint: Serviceconnection # Please change the name of service connection here. More details can be found in additonal information below.
+jobs:
+- job: Semgrep_Scan
+  steps:
+  - template: adotemplates/semgrep_webapps.yml@templates
+    parameters:
+      SEMGREP_APP_TOKEN: $(SEMGREP_APP_TOKEN)  # More details can be found in additonal information below.
