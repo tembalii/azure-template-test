@@ -10,7 +10,7 @@ resources:
     - repository: templates
       type: github
       name: tembalii/azure-template-test
-      ref: refs/head/main
+      ref: refs/heads/main
       endpoint: tembalii # Please change the name of service connection here. More details can be found in additonal information below.
 jobs:
 - job: Semgrep_Scan
