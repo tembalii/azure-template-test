@@ -7,7 +7,7 @@ variables:
 - group: Semgrep_Variables # Ensure your pipeline is permitted to use this resource. More details can be found in additonal information below.
 resources:
   repositories: 
-    - repository: 
+    - repository: templates
       type: github
       name: tembalii/azure-template-test
       ref: refs/head/main
