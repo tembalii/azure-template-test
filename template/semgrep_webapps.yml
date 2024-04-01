@@ -1,7 +1,6 @@
 parameters:
 - name: SEMGREP_APP_TOKEN
   type: string
-
 - name: SEMGREP_REPO_NAME
   type: string
   default: ''
@@ -24,7 +23,7 @@ steps:
   persistCredentials: true
 
 - script: |
-    python -m pip install --upgrade pip
+    python3 -m pip install --upgrade pip
     pip install semgrep
   displayName: 'Install Semgrep'
   env:
@@ -41,7 +40,6 @@ steps:
   displayName: 'Semgrep SAST Scan'
   inputs:
     targetType: 'inline'
-    
     script: |
       EXCLUDE_PATTERNS="${{ parameters.excludePatterns }}"
       INCLUDE_PATTERNS="${{ parameters.includePatterns }}"
