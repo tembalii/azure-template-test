@@ -47,6 +47,7 @@ steps:
       INCLUDE_PATTERNS="${{ parameters.includePatterns }}"
       if [ -z "$(System.PullRequest.PullRequestId)" ]; then
           export SEMGREP_REPO_NAME=${{ parameters.SEMGREP_REPO_NAME }}
+          export SEMGREP_APP_TOKEN=${{ parameters.SEMGREP_APP_TOKEN }}
           echo "Semgrep full scan"
           SEMGREP_COMMAND="semgrep ci"
           if [ -n "$INCLUDE_PATTERNS" ]; then
@@ -67,7 +68,8 @@ steps:
           echo "Pull Request Scan from branch=$(Build.SourceBranchName)"
           echo "Pull Request Id: $(System.PullRequest.PullRequestId)"
           echo "Pull Request number: $(System.PullRequest.PullRequestNumber)"
-          #export SEMGREP_REPO_NAME=${{ parameters.SEMGREP_REPO_NAME }}
+          export SEMGREP_REPO_NAME=${{ parameters.SEMGREP_REPO_NAME }}
+          export SEMGREP_APP_TOKEN=${{ parameters.SEMGREP_APP_TOKEN }}
 
           export SEMGREP_PR_ID=$(System.PullRequest.PullRequestNumber)
           export SEMGREP_BASELINE_REF='origin/$(System.PullRequest.TargetBranch)'
