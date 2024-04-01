@@ -10,8 +10,8 @@ resources:
     - repository: templates
       type: github
       name: tembalii/azure-template-test
-      # ref: refs/heads/main
-      ref: ${{ variables['Build.SourceBranch'] }}
+      ref: refs/heads/main
+      # ref: ${{ variables['Build.SourceBranch'] }}
       endpoint: tembalii # Please change the name of service connection here. More details can be found in additonal information below.
 jobs:
 - job: Semgrep_Scan
