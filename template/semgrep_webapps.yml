@@ -45,7 +45,7 @@ steps:
     script: |
       EXCLUDE_PATTERNS="${{ parameters.excludePatterns }}"
       INCLUDE_PATTERNS="${{ parameters.includePatterns }}"
-      if [ -z "${{ variables['System.PullRequest.PullRequestId'] }}" ]; then
+      if [ -z "$(System.PullRequest.PullRequestId)" ]; then
           export SEMGREP_REPO_NAME=${{ parameters.SEMGREP_REPO_NAME }}
           echo "Semgrep full scan"
           SEMGREP_COMMAND="semgrep ci"
