@@ -46,7 +46,7 @@ steps:
       if [ -z "${{ variables['System.PullRequest.PullRequestId'] }}" ]; then
           export SEMGREP_REPO_NAME=${{ parameters.SEMGREP_REPO_NAME }}
           echo "Semgrep full scan"
-          SEMGREP_COMMAND="semgrep login & semgrep ci"
+          SEMGREP_COMMAND="semgrep ci"
           if [ -n "$INCLUDE_PATTERNS" ]; then
             IFS=',' read -r -a INCLUDE_ARRAY <<< "$INCLUDE_PATTERNS"
             for PATTERN in "${INCLUDE_ARRAY[@]}"; do
@@ -57,7 +57,7 @@ steps:
           for PATTERN in "${EXCLUDE_ARRAY[@]}"; do
             SEMGREP_COMMAND="$SEMGREP_COMMAND --exclude='$PATTERN'"
           done
-          SEMGREP_COMMAND="$SEMGREP_COMMAND --json --output report.json  || true"
+          SEMGREP_COMMAND="$SEMGREP_COMMAND"
           echo "$SEMGREP_COMMAND"
           /bin/bash -c "$SEMGREP_COMMAND"
       elif [ -n "$(System.PullRequest.PullRequestId)" ]; then
