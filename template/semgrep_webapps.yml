@@ -45,8 +45,9 @@ steps:
       INCLUDE_PATTERNS="${{ parameters.includePatterns }}"
       if [ -z "${{ variables['System.PullRequest.PullRequestId'] }}" ]; then
           export SEMGREP_REPO_NAME=${{ parameters.SEMGREP_REPO_NAME }}
+          export SEMGREP_APP_TOKEN=${{ parameters.SEMGREP_APP_TOKEN }}
           echo "Semgrep full scan"
-          semgrep ci
+          semgrep login
           SEMGREP_COMMAND="semgrep ci"
           if [ -n "$INCLUDE_PATTERNS" ]; then
             IFS=',' read -r -a INCLUDE_ARRAY <<< "$INCLUDE_PATTERNS"
