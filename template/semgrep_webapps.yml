@@ -37,6 +37,14 @@ steps:
     displayName: 'Set SEMGREP_REPO_NAME Environment Variable'
 
 - task: Bash@3
+  displayName: 'Check PR ID'
+  inputs:
+    targetType: 'inline'
+    script: |
+      echo "${{ variables['System.PullRequest.PullRequestId'] }}"
+      echo $(System.PullRequest.PullRequestId)
+
+- task: Bash@3
   displayName: 'Semgrep SAST Scan'
   inputs:
     targetType: 'inline'
@@ -63,7 +71,7 @@ steps:
           SEMGREP_COMMAND="$SEMGREP_COMMAND --json --output report.json  || true"
           echo "$SEMGREP_COMMAND"
           /bin/bash -c "$SEMGREP_COMMAND"
-      elif [ -n "${{ variables['System.PullRequest.PullRequestId'] }}" ]; then
+      elif [ -n "$(System.PullRequest.PullRequestId)" ]; then
           echo "Semgrep diff scan"
           echo "Pull Request Scan from branch=$(Build.SourceBranchName)"
           echo "Pull Request Id: $(System.PullRequest.PullRequestId)"
