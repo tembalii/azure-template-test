@@ -37,17 +37,24 @@ steps:
     displayName: 'Set SEMGREP_REPO_NAME Environment Variable'
 
 - task: Bash@3
+  displayName: 'Check PR ID'
+  inputs:
+    targetType: 'inline'
+    script: |
+      echo $(System.PullRequest.PullRequestId)
+      printenv
+
+- task: Bash@3
   displayName: 'Semgrep SAST Scan'
   inputs:
     targetType: 'inline'
     script: |
       EXCLUDE_PATTERNS="${{ parameters.excludePatterns }}"
       INCLUDE_PATTERNS="${{ parameters.includePatterns }}"
-      if [ -z "${{ variables['System.PullRequest.PullRequestId'] }}" ]; then
+      if [ "$(Build.SourceBranchName)" = "main" ]; then
           export SEMGREP_REPO_NAME=${{ parameters.SEMGREP_REPO_NAME }}
           export SEMGREP_APP_TOKEN=${{ parameters.SEMGREP_APP_TOKEN }}
           echo "Semgrep full scan"
-          echo "${{ variables['System.PullRequest.PullRequestId'] }}"
           printenv
           semgrep login
           SEMGREP_COMMAND="semgrep ci"
@@ -69,8 +76,8 @@ steps:
           echo "Pull Request Scan from branch=$(Build.SourceBranchName)"
           echo "Pull Request Id: $(System.PullRequest.PullRequestId)"
           echo "Pull Request number: $(System.PullRequest.PullRequestNumber)"
-          #export SEMGREP_REPO_NAME=${{ parameters.SEMGREP_REPO_NAME }}
-
+          export SEMGREP_REPO_NAME=${{ parameters.SEMGREP_REPO_NAME }}
+          export SEMGREP_APP_TOKEN=${{ parameters.SEMGREP_APP_TOKEN }}
           export SEMGREP_PR_ID=$(System.PullRequest.PullRequestNumber)
           export SEMGREP_BASELINE_REF='origin/$(System.PullRequest.TargetBranch)'
           git fetch origin $(System.PullRequest.TargetBranch):refs/remotes/origin/$(System.PullRequest.TargetBranch)
