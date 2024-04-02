@@ -48,6 +48,7 @@ steps:
           export SEMGREP_APP_TOKEN=${{ parameters.SEMGREP_APP_TOKEN }}
           echo "Semgrep full scan"
           echo "$(System.PullRequest.PullRequestId)"
+          printenv
           semgrep login
           SEMGREP_COMMAND="semgrep ci"
           if [ -n "$INCLUDE_PATTERNS" ]; then
