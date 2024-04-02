@@ -43,7 +43,7 @@ steps:
     script: |
       EXCLUDE_PATTERNS="${{ parameters.excludePatterns }}"
       INCLUDE_PATTERNS="${{ parameters.includePatterns }}"
-      if [ -z "${{ variables['System.PullRequest.PullRequestId'] }}" ]; then
+      if [ "$(Build.SourceBranchName)" = "main" ]; then
           export SEMGREP_REPO_NAME=${{ parameters.SEMGREP_REPO_NAME }}
           export SEMGREP_APP_TOKEN=${{ parameters.SEMGREP_APP_TOKEN }}
           echo "Semgrep full scan"
