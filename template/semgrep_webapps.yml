@@ -44,6 +44,8 @@ steps:
       echo "${{ variables['System.PullRequest.PullRequestId'] }}"
       echo "......."
       echo $System.PullRequest.PullRequestId
+      echo "......."
+      echo $(System.PullRequest.PullRequestId)
       printenv
 
 - task: Bash@3
