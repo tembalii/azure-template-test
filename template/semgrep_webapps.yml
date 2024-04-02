@@ -36,7 +36,7 @@ steps:
       export SEMGREP_REPO_NAME=${{ parameters.SEMGREP_REPO_NAME }}
     displayName: 'Set SEMGREP_REPO_NAME Environment Variable'
 
-- - task: Bash@3
+- task: Bash@3
   displayName: 'Semgrep SAST Scan'
   inputs:
     targetType: 'inline'
