@@ -42,7 +42,9 @@ steps:
     targetType: 'inline'
     script: |
       echo "${{ variables['System.PullRequest.PullRequestId'] }}"
+      echo "......."
       echo $(System.PullRequest.PullRequestId)
+      printenv
 
 - task: Bash@3
   displayName: 'Semgrep SAST Scan'
