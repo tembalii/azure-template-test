@@ -43,10 +43,11 @@ steps:
     script: |
       EXCLUDE_PATTERNS="${{ parameters.excludePatterns }}"
       INCLUDE_PATTERNS="${{ parameters.includePatterns }}"
-      if [ "$(Build.SourceBranchName)" = "main" ]; then
+      if [ $(Build.SourceBranchName) = "main" ]; then
           export SEMGREP_REPO_NAME=${{ parameters.SEMGREP_REPO_NAME }}
           export SEMGREP_APP_TOKEN=${{ parameters.SEMGREP_APP_TOKEN }}
           echo "Semgrep full scan"
+          echo  $(Build.SourceBranchName)
           printenv
           semgrep login
           SEMGREP_COMMAND="semgrep ci"
