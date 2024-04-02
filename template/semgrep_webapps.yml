@@ -63,7 +63,7 @@ steps:
           SEMGREP_COMMAND="$SEMGREP_COMMAND --json --output report.json  || true"
           echo "$SEMGREP_COMMAND"
           /bin/bash -c "$SEMGREP_COMMAND"
-      elif [ -n "$(System.PullRequest.PullRequestId)" ]; then
+      elif [ -n "${{ variables['System.PullRequest.PullRequestId'] }}" ]; then
           echo "Semgrep diff scan"
           echo "Pull Request Scan from branch=$(Build.SourceBranchName)"
           echo "Pull Request Id: $(System.PullRequest.PullRequestId)"
